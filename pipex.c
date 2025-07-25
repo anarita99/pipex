@@ -6,7 +6,7 @@
 /*   By: anarita <anarita@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 14:59:37 by adores            #+#    #+#             */
-/*   Updated: 2025/07/25 15:58:27 by anarita          ###   ########.fr       */
+/*   Updated: 2025/07/25 16:12:06 by anarita          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int main(int ac, char **av)
 	else
 		n = 6;
 	if (id != 0)
-		wait();
+		wait(NULL);
 	int i;
 	for (i = n; i < n + 5; i++)
 	{
