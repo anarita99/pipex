@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adores <adores@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 14:09:08 by adores            #+#    #+#             */
-/*   Updated: 2025/08/05 14:59:31 by adores           ###   ########.fr       */
+/*   Created: 2025/04/18 19:19:36 by adores            #+#    #+#             */
+/*   Updated: 2025/04/19 14:17:08 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <time.h>
-#include <stdlib.h>
-#include <sys/wait.h>
+#include "libft.h"
 
-#include "libft/libft.h"
-
-void	ft_error();
+void	ft_lstdelone(t_list *lst, void (*del)(void*))
+{
+	if (!lst || !del)
+		return ;
+	del (lst ->content);
+	free (lst);
+}

@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
+/*   By: adores <adores@student.42lisboa.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 14:09:08 by adores            #+#    #+#             */
-/*   Updated: 2025/08/05 14:59:31 by adores           ###   ########.fr       */
+/*   Created: 2025/04/08 14:52:28 by adores            #+#    #+#             */
+/*   Updated: 2025/04/11 18:29:13 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <time.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-
-#include "libft/libft.h"
-
-void	ft_error();
+int	ft_toupper(int c)
+{
+	if (c >= 'a' && c <= 'z')
+		c -= 32;
+	return (c);
+}

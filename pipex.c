@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anarita <anarita@student.42.fr>            +#+  +:+       +#+        */
+/*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 14:59:37 by adores            #+#    #+#             */
-/*   Updated: 2025/07/31 12:34:20 by anarita          ###   ########.fr       */
+/*   Updated: 2025/08/05 15:01:01 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,119 +27,14 @@
 	}
 	printf("Done!\n");
 }*/
-/*int main(int ac, char **av)
-{
-	int id = fork();
-	if (id != 0)
-		fork();
-	printf("Hello world\n");
-	//if (id == 0)
-	//	printf("Hello from child process\n");
-	//else
-	//	printf("Hello from the main process\n");
-	return (0);
-}*/
-/*
-int main(int ac, char **av)
-{
-	int id = fork();
-	int n;
-	if (id == 0)
-		n = 1;
-	else
-		n = 6;
-	if (id != 0)
-		wait(NULL);
-	int i;
-	for (i = n; i < n + 5; i++)
-	{
-		printf("%d ", i);
-		fflush(stdout);
-	}
-	if (id != 0)
-	{
-		printf("\n");
-	}
-}*/
 
-/*int	main(int ac, char **av)
+void	close_all_files(int *fd, int file)
 {
-	int fd[2];
-	//fd[0] - read
-	//fd[1] - write
-	if (pipe(fd) == -1)
-	{
-		printf("ERROR");
-		return(1);
-	}
-	int id = fork();
-	if (id == -1)
-	{
-			printf("Error");
-			return (4);
-	}
-	if (id == 0)
-	{
-		close(fd[0]);
-		int x;
-		printf("Input a number: ");
-		scanf("%d", &x);
-		if(write(fd[1], &x, sizeof(int)) == -1)
-		{
-			printf("Error");
-			return (2);
-		}
-		close(fd[1]);
-	}
-	else
-	{
-		close(fd[1]);
-		int y;
-		if (read(fd[0], &y, sizeof(int)) == -1)
-		{
-			printf("Error");
-			return (3);
-		}
-		y = y * 3;
-		close(fd[0]);
-		printf("Got from child process: %d\n", y);
-	}
-	return (0);
-}*/
-
-/*int main(int argc, char **argv)
-{
-	int fd[2];
-	if (pipe(fd) == -1)
-	{
-		return (1);
-	}
-	int pid1 = fork();
-	if(pid1 < 0)
-		return (2);
-	if (pid1 == 0)
-	{	//Child process 1(ping)
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[0]);
-		close(fd[1]);
-		execlp("ping", "ping", "-c", "5", "google.com", NULL);
-	}
-	int pid2 = fork();
-	if(pid2 < 0)
-		return (3);
-	if (pid2 == 0)
-	{	//Child process 1(ping)
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		close(fd[1]);
-		execlp("grep", "grep", "rtt", NULL);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
-	return(0);
-}*/
+	if (close(fd[0]) < 0 || close(fd[1]) < 0)
+		ft_error;
+	if (close(file) < 0)
+		ft_error();
+}
 
 void	call_child1(char **av, char **envp, int *fd)
 {
@@ -149,17 +44,26 @@ void	call_child1(char **av, char **envp, int *fd)
 	{
 		close(fd[0]);
 		close(fd[1]);
+		perror("ERROR");
+		exit(EXIT_FAILURE);
 	}
 	dup2(file1, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
+	close_all_files(fd, file1);
 	close(fd[0]);
 	close(fd[1]);
+	if (execve("/usr/bin/ls", ft_split("ls", ' '), envp) == -1)
+	{
+		perror("ERROR");
+		//limpar leaks e sair do programa
+	}
+
 }
 
 void	call_child2(char **av, char **envp, int *fd)
 {
 	int	file2;
-	file2 = open(av[4], O_WRONLY);
+	file2 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (file2 < 0)
 	{
 		close(fd[0]);
@@ -167,19 +71,21 @@ void	call_child2(char **av, char **envp, int *fd)
 	}
 	dup2(fd[0], STDIN_FILENO);
 	dup2(file2, STDOUT_FILENO);
-	
-	close(fd[0]);
-	close(fd[1]);
+	close_all_files(fd, file2);
+	if (execve("/usr/bin/wc", ft_split("wc", ' '), envp) == -1)
+	{
+		exit(EXIT_FAILURE);
+		//limpar leaks e sair do programa
+	}
 }
+
 
 int	main(int ac, char **av, char *envp[])
 {
 	int		fd[2];
 	pid_t	proc_id[2];
 
-	if (ac == 5)
-	{
-		if(pipe(fd) == -1)
+	if(pipe(fd) == -1)
 			return(1);
 		proc_id[0] = fork();
 		if(proc_id[0] < 0)
@@ -194,13 +100,18 @@ int	main(int ac, char **av, char *envp[])
 			if (proc_id[1] == 0)
 				call_child2(av, envp, fd);
 		}
-		close(fd[0]);
-		close(fd[1]);
+		if (close(fd[0]) < 0 || close(fd[1]) < 0)
+			ft_error();
 		waitpid(proc_id[0], NULL, 0);
 		waitpid(proc_id[1], NULL, 0);
-		return(0);
+	return(0);
+	if (ac == 5)
+	{
+		
 	}
+	/*
 	else
 		write(2, "Error", 5);
-		return(1);
+	*/
+	return(1);
 }

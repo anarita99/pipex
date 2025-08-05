@@ -1,0 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 11:29:06 by adores            #+#    #+#             */
+/*   Updated: 2025/08/05 15:37:25 by adores           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex.h"
+
+void	ft_error()
+{
+	perror("ERROR");
+	exit(EXIT_FAILURE);
+}
+
+void	free_str(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	while (i > 0)
+		free(str[--i]);
+	free(str);
+}
+
+static char	*get_cmd_path(char **paths, char *cmd)
+{
+	int		i;
+	char	*add_path;
+	char	*path;
+
+	i = 0;
+	while (paths[i])
+	{
+		add_path = ft_strjoin(paths[i], '/');
+		path = ft_strjoin(add_path, cmd[0]);
+		free(add_path);
+		if(access(path, F_OK | X_OK) == 0)
+		{
+			free(cmd);
+			free_str(paths);
+			return (path);
+		}
+		free(path);
+		i++;
+	}
+	free_str(paths);
+	free(cmd);
+	return (NULL);
+}
+
+char *find_path(char *envp[], char *cmd)
+{
+	char	**paths;
+	int		i;
+	char	*path;
+
+	if (ft_strchr(cmd, '/'))
+		return (cmd);
+	if(!envp || !*envp)
+		ft_error();
+	i = 0;
+	while (ft_strnstr(envp[i], "PATH", 4) == 0)
+		i++;
+	if(!envp[i])
+		return(NULL);
+	paths = ft_split(envp[i] + 5, ':');
+	path = get_cmd_path(paths, cmd);
+	return (path);
+	return (cmd);
+}
+
+void	exec(char *av, char *envp[])
+{
+	char	*path;
+	char	*cmd;
+
+	cmd = ft_split(av, ' ');
+	
+}
