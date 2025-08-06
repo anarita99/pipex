@@ -6,7 +6,7 @@
 /*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 14:59:37 by adores            #+#    #+#             */
-/*   Updated: 2025/08/06 14:55:01 by adores           ###   ########.fr       */
+/*   Updated: 2025/08/06 15:10:19 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,7 @@ void	call_child1(char **av, char **envp, int *fd)
 	{
 		close(fd[0]);
 		close(fd[1]);
-		perror("ERROR");
-		exit(EXIT_FAILURE);
+		ft_error();
 	}
 	dup2(file1, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
@@ -61,6 +60,7 @@ void	call_child2(char **av, char **envp, int *fd)
 	{
 		close(fd[0]);
 		close(fd[1]);
+		ft_error();
 	}
 	dup2(fd[0], STDIN_FILENO);
 	dup2(file2, STDOUT_FILENO);
@@ -90,18 +90,18 @@ int	main(int ac, char **av, char *envp[])
 	exit_code = 0;
 	if (ac == 5)
 	{
-		if(pipe(fd) == -1)
+		if (pipe(fd) == -1)
 			ft_error();
 		proc_id[0] = fork();
-		if(proc_id[0] < 0)
-			return(1);
-		if(proc_id[0] == 0)
+		if (proc_id[0] < 0)
+			ft_error();
+		if (proc_id[0] == 0)
 			call_child1(av, envp, fd);
 		else
 		{
 			proc_id[1] = fork();
 			if (proc_id[1] < 0)
-				return(1);
+				ft_error();
 			if (proc_id[1] == 0)
 				call_child2(av, envp, fd);
 		}
@@ -110,6 +110,9 @@ int	main(int ac, char **av, char *envp[])
 		exit_code = ft_wait(proc_id);
 	}
 	else
+	{
 		write(2, "Number of arguments should be five.", 35);
-	return(exit_code);
+		return (1);
+	}
+	return (exit_code);
 }
