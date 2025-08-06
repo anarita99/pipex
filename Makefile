@@ -6,7 +6,7 @@
 #    By: adores <adores@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/04 10:49:23 by adores            #+#    #+#              #
-#    Updated: 2025/08/04 11:10:59 by adores           ###   ########.fr        #
+#    Updated: 2025/08/06 10:47:49 by adores           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 LFLAGS =  -Llibft -lft 
 
-SRC = pipex.c \
+SRC = pipex.c utils.c
 
 HEADER = pipex.h
 

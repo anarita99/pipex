@@ -6,7 +6,7 @@
 /*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 11:29:06 by adores            #+#    #+#             */
-/*   Updated: 2025/08/05 15:37:25 by adores           ###   ########.fr       */
+/*   Updated: 2025/08/06 10:50:48 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static char	*get_cmd_path(char **paths, char *cmd)
 	i = 0;
 	while (paths[i])
 	{
-		add_path = ft_strjoin(paths[i], '/');
-		path = ft_strjoin(add_path, cmd[0]);
+		add_path = ft_strjoin(paths[i], "/");
+		path = ft_strjoin(add_path, &cmd[0]);
 		free(add_path);
 		if(access(path, F_OK | X_OK) == 0)
 		{
@@ -56,7 +56,7 @@ static char	*get_cmd_path(char **paths, char *cmd)
 	return (NULL);
 }
 
-char *find_path(char *envp[], char *cmd)
+static char *find_path(char *envp[], char *cmd)
 {
 	char	**paths;
 	int		i;
@@ -80,8 +80,17 @@ char *find_path(char *envp[], char *cmd)
 void	exec(char *av, char *envp[])
 {
 	char	*path;
-	char	*cmd;
+	char	**cmd;
 
 	cmd = ft_split(av, ' ');
-	
+	if(!cmd || !cmd[0] || !cmd[0][0])
+		ft_error();
+	path = find_path(envp, cmd[0]);
+	if(!path)
+		ft_error();
+	if (execve(path, cmd, envp) == -1)
+	{
+		free_str(cmd);
+		ft_error();
+	}
 }
