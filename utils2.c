@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/25 14:09:08 by adores            #+#    #+#             */
-/*   Updated: 2025/08/07 14:44:01 by adores           ###   ########.fr       */
+/*   Created: 2025/08/07 14:43:04 by adores            #+#    #+#             */
+/*   Updated: 2025/08/07 14:43:29 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <time.h>
-#include <stdlib.h>
-#include <sys/wait.h>
+#include "pipex.h"
 
-#include "libft/libft.h"
-
-void	ft_error();
-void	exec(char *av, char *envp[]);
-void	close_all_files(int *fd, int file);
+void	close_all_files(int *fd, int file)
+{
+	if (close(fd[0]) < 0 || close(fd[1]) < 0)
+		ft_error();
+	if (close(file) < 0)
+		ft_error();
+}
