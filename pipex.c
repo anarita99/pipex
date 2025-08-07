@@ -6,27 +6,11 @@
 /*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 14:59:37 by adores            #+#    #+#             */
-/*   Updated: 2025/08/06 15:10:19 by adores           ###   ########.fr       */
+/*   Updated: 2025/08/07 10:48:04 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-/*int	main(void)
-{
-	char *command[] = {"grep", "-E", "c$", "-", 0};
-	char *bin_file = command[0];
-	
-	int redirect_fd = open("redirect_fd.txt", O_CREAT | O_WRONLY);
-	dup2(redirect_fd, STDOUT_FILENO);
-	close(redirect_fd);
-	
-	if(execvp(bin_file, command) == -1)
-	{
-		fprintf(stderr, "Error executing %s\n", bin_file);
-	}
-	printf("Done!\n");
-}*/
 
 void	close_all_files(int *fd, int file)
 {
@@ -78,6 +62,8 @@ int	ft_wait(pid_t *proc_id)
 		ft_error();
 	if (WIFEXITED(status))
 		exit_code = WEXITSTATUS(status);
+	if(waitpid(proc_id[0], NULL, 0) < 0)
+		ft_error();
 	return(exit_code);
 }
 
