@@ -6,7 +6,7 @@
 /*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 11:29:06 by adores            #+#    #+#             */
-/*   Updated: 2025/08/06 10:50:48 by adores           ###   ########.fr       */
+/*   Updated: 2025/08/07 11:53:50 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void	exec(char *av, char *envp[])
 		ft_error();
 	path = find_path(envp, cmd[0]);
 	if(!path)
+		ft_error();
+	if (path == cmd[0] && !ft_strchr(cmd[0], '/'))
 		ft_error();
 	if (execve(path, cmd, envp) == -1)
 	{

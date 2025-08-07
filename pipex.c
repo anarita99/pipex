@@ -6,13 +6,13 @@
 /*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 14:59:37 by adores            #+#    #+#             */
-/*   Updated: 2025/08/07 10:48:04 by adores           ###   ########.fr       */
+/*   Updated: 2025/08/07 11:29:43 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	close_all_files(int *fd, int file)
+static void	close_all_files(int *fd, int file)
 {
 	if (close(fd[0]) < 0 || close(fd[1]) < 0)
 		ft_error();
@@ -20,7 +20,7 @@ void	close_all_files(int *fd, int file)
 		ft_error();
 }
 
-void	call_child1(char **av, char **envp, int *fd)
+static void	call_child1(char **av, char **envp, int *fd)
 {
 	int file1;
 	file1 = open(av[1], O_RDONLY);
@@ -36,7 +36,7 @@ void	call_child1(char **av, char **envp, int *fd)
 	exec(av[2], envp);
 }
 
-void	call_child2(char **av, char **envp, int *fd)
+static void	call_child2(char **av, char **envp, int *fd)
 {
 	int	file2;
 	file2 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
@@ -52,7 +52,7 @@ void	call_child2(char **av, char **envp, int *fd)
 	exec(av[3], envp);
 }
 
-int	ft_wait(pid_t *proc_id)
+static int	ft_wait(pid_t *proc_id)
 {
 	int	exit_code;
 	int	status;
