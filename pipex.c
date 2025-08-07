@@ -6,7 +6,7 @@
 /*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 14:59:37 by adores            #+#    #+#             */
-/*   Updated: 2025/08/07 14:46:44 by adores           ###   ########.fr       */
+/*   Updated: 2025/08/07 16:13:33 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,28 +59,22 @@ static int	ft_wait(pid_t *proc_id)
 	return(exit_code);
 }
 
-static void	no_more_space(char **av, char *envp[], int fd[2], pid_t proc_id[2])
+static void	pipex_process(char **av, char *envp[], pid_t proc_id[2])
 {
+	int	fd[2];
+	
 	if (pipe(fd) == -1)
 		ft_error();
 	proc_id[0] = fork();
 	if (proc_id[0] < 0)
-	{
-			close(fd[0]);
-			close(fd[1]);
-			ft_error();
-	}
+		close_and_error(fd);
 	if (proc_id[0] == 0)
 		call_child1(av, envp, fd);
 	else
 	{
 		proc_id[1] = fork();
 		if (proc_id[1] < 0)
-		{
-			close(fd[0]);
-			close(fd[1]);
-			ft_error();
-		}
+			close_and_error(fd);
 		if (proc_id[1] == 0)
 			call_child2(av, envp, fd);
 	}
@@ -90,14 +84,13 @@ static void	no_more_space(char **av, char *envp[], int fd[2], pid_t proc_id[2])
 
 int	main(int ac, char **av, char *envp[])
 {
-	int		fd[2];
 	pid_t	proc_id[2];
 	int		exit_code;
 
 	exit_code = 0;
 	if (ac == 5)
 	{
-		no_more_space(av, envp, fd, proc_id);
+		pipex_process(av, envp, proc_id);
 		exit_code = ft_wait(proc_id);
 	}
 	else
