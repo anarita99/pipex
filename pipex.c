@@ -6,7 +6,7 @@
 /*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 14:59:37 by adores            #+#    #+#             */
-/*   Updated: 2025/08/12 10:27:47 by adores           ###   ########.fr       */
+/*   Updated: 2025/08/12 12:26:30 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static void	call_child1(char **av, char **envp, int *fd)
 	{
 		close(fd[0]);
 		close(fd[1]);
-		ft_error();
+		perror(av[1]);
+		exit(EXIT_FAILURE);
 	}
 	dup2(file1, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
@@ -97,7 +98,7 @@ int	main(int ac, char **av, char *envp[])
 	}
 	else
 	{
-		write(2, "ERROR: Number of arguments should be five.", 35);
+		write(2, "ERROR: Number of arguments should be five.", 42);
 		return (1);
 	}
 	return (exit_code);
