@@ -6,7 +6,7 @@
 /*   By: adores <adores@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 14:59:37 by adores            #+#    #+#             */
-/*   Updated: 2025/08/11 15:07:44 by adores           ###   ########.fr       */
+/*   Updated: 2025/08/12 10:27:47 by adores           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	call_child2(char **av, char **envp, int *fd)
 {
 	int	file2;
 
-	file2 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	file2 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file2 < 0)
 	{
 		close(fd[0]);
