@@ -49,5 +49,3 @@ pipex/
 ├── Makefile        # Build automation
 └── libft/          # Custom C library dependency
 ```
-
-*Created as part of the 42 school curriculum*
